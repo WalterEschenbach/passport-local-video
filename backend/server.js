@@ -78,6 +78,13 @@ app.post("/register", (req, res) => {
 app.get("/user", (req, res) => {
   res.send(req.user); // The req.user stores the entire user that has been authenticated inside of it.
 });
+app.get('/logout', (req, res) => {
+  // handle with passport
+  req.logout()
+  res.status(200).send()
+  console.log('User has logged out...')
+})
+
 //----------------------------------------- END OF ROUTES---------------------------------------------------
 //Start Server
 app.listen(4000, () => {

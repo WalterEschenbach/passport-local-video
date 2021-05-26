@@ -40,6 +40,15 @@ function App() {
       console.log(res.data);
     });
   };
+  const logout = () => {
+    Axios({
+      method: "GET",
+      withCredentials: true,
+      url: "http://localhost:4000/logout",
+    }).then((res) => {
+      console.log(res);
+    });
+  };
   return (
     <div className="App">
       <div>
@@ -72,6 +81,9 @@ function App() {
         <h1>Get User</h1>
         <button onClick={getUser}>Submit</button>
         {data ? <h1>Welcome Back {data.username}</h1> : null}
+      </div>
+      <div>
+        <button onClick={logout}>Logout</button>
       </div>
     </div>
   );
