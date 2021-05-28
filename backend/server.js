@@ -3,11 +3,8 @@ const express = require("express");
 require('dotenv').config()
 const cors = require("cors");
 const passport = require("passport");
-const passportLocal = require("passport-local").Strategy;
-const cookieParser = require("cookie-parser");
 const bcrypt = require("bcryptjs");
 const session = require("express-session");
-const bodyParser = require("body-parser");
 const app = express();
 const User = require("./user");
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
@@ -23,8 +20,7 @@ mongoose.connect(
 );
 
 // Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json())
 app.use(
   cors({
     origin: "http://localhost:3000", // <-- location of the react app were connecting to
@@ -38,7 +34,6 @@ app.use(
     saveUninitialized: true,
   })
 );
-app.use(cookieParser("secretcode"));
 app.use(passport.initialize());
 app.use(passport.session());
 require("./passportConfig")(passport);
@@ -51,6 +46,7 @@ app.post("/login", (req, res, next) => {
     if (err) throw err;
     if (!user) res.send("No User Exists");
     else {
+      console.log('req.passport:', req._passport)
       req.logIn(user, (err) => {
         if (err) throw err;
         res.send("Successfully Authenticated");
@@ -59,6 +55,8 @@ app.post("/login", (req, res, next) => {
     }
   })(req, res, next);
 });
+
+
 app.post("/register", (req, res) => {
   User.findOne({ username: req.body.username }, async (err, doc) => {
     if (err) throw err;
